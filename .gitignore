@@ -1,0 +1,8 @@
+*
+!/**/
+!*.c
+!*.h
+!*.bf
+!*.m # monty files for testing purposes
+!README.md
+!.gitignore
