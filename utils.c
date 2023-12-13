@@ -120,6 +120,7 @@ void execute_command(char *command)
 		{"pall", pall},		   {"add", add},	  {"swap", swap},
 		{"sub", sub},		   {"div", division}, {"mul", mul},
 		{"mod", mod},		   {"pchar", pchar},  {"pstr", pstr},
+		{"rotl", rotl}, {"rotr", rotr},
 		{NULL, NULL}};
 
 	/* handle comments and nop opcode */
