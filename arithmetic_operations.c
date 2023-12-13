@@ -20,19 +20,6 @@ void add(stack_t **stack, unsigned int line_number)
 
 }
 /**
- * nop-does not do anything on the stack
- * @stack: pointer to a pointer to the stack
- * @line_number: line number
- * Return: void
- */
-void nop(stack_t **stack, unsigned int line_number)
-{
-	(void) stack;
-	(void) line_number;
-
-	return;
-}
-/**
  * sub-subtracts the top element of the stack
  * from the second top element of the stack
  * @stack: pointer to a pointer to the stack
