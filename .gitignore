@@ -6,3 +6,5 @@
 !*.m # monty files for testing purposes
 !README.md
 !.gitignore
+bytecodes
+monty_project

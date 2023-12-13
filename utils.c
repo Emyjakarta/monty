@@ -114,10 +114,12 @@ void execute_command(char *command)
 {
 	size_t i = 0;
 
-	instruction_t instructs[] = {{"push", handle_push}, {"pop", pop},
-								 {"pint", pint},		{"pall", pall},
-								 {"swap", swap},		{"pchar", pchar},
-								 {"pstr", pstr},		{NULL, NULL}};
+	instruction_t instructs[] = {
+		{"push", handle_push}, {"pop", pop},	  {"pint", pint},
+		{"pall", pall},		   {"add", add},	  {"swap", swap},
+		{"sub", sub},		   {"div", division}, {"mul", mul},
+		{"mod", mod},		   {"pchar", pchar},  {"pstr", pstr},
+		{NULL, NULL}};
 
 	/* handle comments and nop opcode */
 	if (*command == '#')
