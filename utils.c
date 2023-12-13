@@ -114,12 +114,15 @@ void execute_command(char *command)
 {
 	size_t i = 0;
 
-	instruction_t instructs[] = {{"push", handle_push},
-								 {"pop", pop},
-								 {"pint", pint},
-								 {"pall", pall},
-								 {"swap", swap},
-								 {NULL, NULL}};
+	instruction_t instructs[] = {
+		{"push", handle_push},
+		{"pop", pop},
+		{"pint", pint},
+		{"pall", pall},
+		{"add", add},
+		{"swap", swap},
+		{NULL, NULL}
+	};
 
 	while (instructs[i].opcode != NULL)
 	{
