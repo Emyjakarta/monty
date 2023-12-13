@@ -123,7 +123,7 @@ void execute_command(char *command)
 		{"swap", swap},
 		{"nop", nop},
 		{"sub", sub},
-		{"div", div},
+		/*{"div", div},*/
 		{"mul", mul},
 		{"mod", mod},
 		{NULL, NULL}
