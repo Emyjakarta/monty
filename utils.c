@@ -61,7 +61,7 @@ void parse(void)
 	monty_list.buffer = _calloc(BUFF_SIZE, sizeof(char));
 	if (monty_list.buffer == NULL)
 	{
-		fprintf(stderr, "malloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
 		handle_exit();
 	}
 
@@ -73,7 +73,7 @@ void parse(void)
 				_realloc(monty_list.buffer, total_read, total_read * 2);
 			if (monty_list.buffer == NULL)
 			{
-				fprintf(stderr, "malloc failed\n");
+				fprintf(stderr, "Error: malloc failed\n");
 				handle_exit();
 			}
 		}

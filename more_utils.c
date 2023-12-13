@@ -67,7 +67,7 @@ char **tokenize(char *str, const char *delim)
 	dup_str = strdup(str);
 	if (dup_str == NULL)
 	{
-		fprintf(stderr, "malloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
 		handle_exit();
 	}
 	token = strtok(dup_str, delim);
@@ -84,7 +84,7 @@ char **tokenize(char *str, const char *delim)
 		commands = malloc(sizeof(char *) * (num_of_tokens + 1));
 		if (commands == NULL)
 		{
-			fprintf(stderr, "malloc failed");
+			fprintf(stderr, "Error: malloc failed\n");
 			handle_exit();
 		}
 		token = strtok(str, delim);
