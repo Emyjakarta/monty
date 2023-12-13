@@ -82,6 +82,7 @@ void parse(void)
 		handle_exit();
 	}
 
+	memset(monty_list.buffer, 0, sizeof(char) * BUFF_SIZE);
 	while (fread(monty_list.buffer, BUFF_SIZE, 1, file) != 0)
 		;
 	fclose(file);
