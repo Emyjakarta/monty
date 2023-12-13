@@ -14,19 +14,27 @@ void rotl(stack_t **stack, unsigned int line_number)
 	stack_t *top_element = *stack;
 	(void) line_number;
 
-	stack_t *second = NULL;
+	/*stack_t *second = NULL;*/
 
-	if (size(monty_list) < 2 || top_element == NULL || top_element->next == NULL)
-	{
+	/*if (size(monty_list) < 2 || top_element == NULL || top_element->next == NULL)*/
+	/*if (*stack == NULL || (*stack)->next == NULL)*/
+	/*{
 		fprintf(stderr, "L%u: can't rotl, stack too short\n", line_number);
 		return;
-	}
-	second = top_element->next;
-	while (top_element->next != NULL)
+	}*/
+	/*top_element = *stack;*/
+	/*second = (*stack)->next;*/
+	/*while (top_element->next != NULL)
 	{
 		top_element = top_element->next;
 	}
-	monty_list.head = second;
+	top_element->next = *stack;
+	(*stack)->prev = top_element;
+	*stack = second;
+	(*stack)->prev = NULL;
+	monty_list.tail = top_element;*/
+
+	/*monty_list.head = second;
 	if (monty_list.tail->next != NULL)
 	{
 		top_element->next = monty_list.tail->next;
@@ -35,7 +43,7 @@ void rotl(stack_t **stack, unsigned int line_number)
 	}
 	monty_list.head->prev = NULL;
 	(*stack)->prev = monty_list.tail;
-	monty_list.tail = top_element;
+	monty_list.tail = top_element;*/
 
 	/*top_element->next = *stack;*/
 	/*stack = second;
@@ -44,13 +52,13 @@ void rotl(stack_t **stack, unsigned int line_number)
 	top_element->next = NULL;
 	monty_list.tail = top_element;*/
 
-	/*top_element->next = monty_list.head;
+	top_element->next = monty_list.head;
 	monty_list.head->prev = top_element;
 	monty_list.head = monty_list.head->next;
 	top_element->next = NULL;
 	monty_list.head->prev = NULL;
 	(*stack)->prev = NULL;
-	monty_list.tail = top_element; */
+	monty_list.tail = top_element;
 }
 /**
  *  * mod-computes the rest of the division of the
