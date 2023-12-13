@@ -50,8 +50,6 @@ void free_cmds(void)
 	monty_list.cleanup((void **)&monty_list.commands);
 }
 
-#include "monty.h"
-
 /**
  * tokenize - returns a string array of strings based on a delimiter
  * @str: the string to tokenize
