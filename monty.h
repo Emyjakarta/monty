@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define BUFF_SIZE 1024
+
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: the integer data to store
@@ -41,8 +43,12 @@ typedef struct instruction_s
  * @tail: keeps the address of the tail node (helps to achieve O(1) when
  * inserting at the end)
  * @size: keeps track of the number of nodes int the queue or stack
- * @cmd_count: keeps track of the number of commands executed since the shell
- * started
+ * @line_number: the line number where the instruction appears
+ * @filename: the name of the file received on the command line (argv[1])
+ * @buffer: the buffer to store the data from the file
+ * @opcode: the opcode to work with
+ * @value: used when the @opcode is "push"
+ * @commands: an array of commands containing each instruction from the file
  * @cleanup: a cleanup function for each element in the list
  */
 typedef struct list_s
@@ -50,10 +56,16 @@ typedef struct list_s
 	stack_t *head;
 	stack_t *tail;
 	size_t size;
-	size_t cmd_count;
+	unsigned int line_number;
+	char *filename;
+	char *buffer;
+	char *opcode;
+	char *value;
+	char **commands;
 	void (*cleanup)(void **);
 } list_t;
 
+/* monty command context */
 extern list_t monty_list;
 
 /* useful simple macro functions for quick info */
@@ -61,14 +73,25 @@ extern list_t monty_list;
 #define top(list) ((list).head->n)
 #define size(list) ((list).size)
 #define is_empty(list) ((list).size == 0)
+#define is_digit(c) ((c) >= '0' && (c) <= '9')
 
 /* stack operations */
 
 void push(stack_t **stack, int data);
 void pop(stack_t **stack, unsigned int line_number);
-void pint(stack_t *stack, unsigned int line_number);
-void pall(stack_t *stack, unsigned int line_number);
+void pint(stack_t **stack, unsigned int line_number);
+void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number);
 
+/* utility functions */
+
+void parse(void);
+void free_cmds(void);
 void _free(void **ptr);
+void handle_exit(void);
+int is_integer(const char *str);
+void execute_command(char *command);
+void safe_free_stack(stack_t **stack);
+char **tokenize(char *str, const char *delim);
+void handle_push(stack_t **stack, unsigned int line_number);
 
 #endif /* MONTY_H */
