@@ -36,14 +36,12 @@ void handle_exit(void)
 */
 void free_cmds(void)
 {
-	int i;
+	size_t i;
 
 	if (monty_list.commands == NULL)
-	{
 		return;
-	}
 
-	for (i = 0; monty_list.commands[i] != NULL; i++)
+	for (i = 0; i < monty_list.line_number; i++)
 	{
 		monty_list.cleanup((void **)&monty_list.commands[i]);
 	}
