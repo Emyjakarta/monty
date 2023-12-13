@@ -42,6 +42,8 @@ typedef struct instruction_s
  * @head: keeps the address of the head node
  * @tail: keeps the address of the tail node (helps to achieve O(1) when
  * inserting at the end)
+ * @ds: keeps track of the specific data structure to use with the linked lists
+ * (either stacks or queues)
  * @size: keeps track of the number of nodes int the queue or stack
  * @line_number: the line number where the instruction appears
  * @filename: the name of the file received on the command line (argv[1])
@@ -56,6 +58,7 @@ typedef struct list_s
 	stack_t *head;
 	stack_t *tail;
 	size_t size;
+	int ds;
 	unsigned int line_number;
 	char *filename;
 	char *buffer;
@@ -68,6 +71,12 @@ typedef struct list_s
 /* monty command context */
 extern list_t monty_list;
 
+/* flags to choose which data structure to use */
+
+#define USE_QUEUE 1
+#define USE_STACK 2
+#define USE_DEFAULT 0 /* default is stack */
+
 /* useful simple macro functions for quick info */
 
 #define top(list) ((list).head->n)
@@ -75,6 +84,10 @@ extern list_t monty_list;
 #define is_empty(list) ((list).size == 0)
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 #define is_in_ascii_range(c) ((c) >= 0 && (c) <= 127)
+#define queue(opcode) (strcmp((opcode), "queue") == 0)
+#define stack(opcode) (strcmp((opcode), "stack") == 0)
+#define set_ds(opcode)                                                        \
+	((queue(opcode)) ? USE_QUEUE : ((stack(opcode)) ? USE_STACK : USE_DEFAULT))
 
 /* stack operations */
 
