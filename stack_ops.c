@@ -108,3 +108,26 @@ void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 
 	fflush(stdout);
 }
+
+/**
+ * swap - swaps the top two elements of the stack
+ * @stack: the stack
+ * @line_number: the index of the current command
+ */
+void swap(stack_t **stack, unsigned int line_number)
+{
+	int c;
+
+	if (size(monty_list) < 2)
+	{
+		fprintf(stderr, "L%u: can't swap, stack too short\n", line_number);
+		handle_exit();
+	}
+
+	/* keep the value at top of stack */
+	c = top(monty_list);
+
+	/* perform the swap operation */
+	(*stack)->n = (*stack)->next->n;
+	(*stack)->next->n = c;
+}
