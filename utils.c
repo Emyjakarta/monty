@@ -121,9 +121,8 @@ void execute_command(char *command)
 		{"pall", pall},
 		{"add", add},
 		{"swap", swap},
-		{"nop", nop},
 		{"sub", sub},
-		/*{"div", div},*/
+		{"div", division},
 		{"mul", mul},
 		{"mod", mod},
 		{NULL, NULL}
