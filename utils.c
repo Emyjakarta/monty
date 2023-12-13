@@ -122,10 +122,10 @@ void execute_command(char *command)
 		{"add", add},
 		{"swap", swap},
 		{"nop", nop},
-		/*{"sub", sub},
+		{"sub", sub},
 		{"div", div},
 		{"mul", mul},
-		{"mod", mod},*/
+		{"mod", mod},
 		{NULL, NULL}
 	};
 
