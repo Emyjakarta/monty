@@ -121,6 +121,10 @@ void execute_command(char *command)
 		{"pall", pall},
 		{"add", add},
 		{"swap", swap},
+		{"sub", sub},
+		{"div", division},
+		{"mul", mul},
+		{"mod", mod},
 		{NULL, NULL}
 	};
 
