@@ -89,7 +89,7 @@ void division(stack_t **stack, unsigned int line_number)
 }
 /**
  * mod-computes the rest of the division of the
- * second top element of the stack by the 
+ * second top element of the stack by the
  * top element of the stack
  * @stack: pointer to a pointer to the stack
  * @line_number: line number
