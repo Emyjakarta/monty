@@ -1,5 +1,4 @@
 #include "monty.h"
-/*#include <string.h>*/
 /**
  * add-adds the top two elements of the stack
  * @stack: pointer to a pointer to the stack
@@ -18,5 +17,15 @@ void add(stack_t **stack, unsigned int line_number)
 	top_element = top(monty_list);
 	pop(stack, line_number);
 	(*stack)->n += top_element;
-	
+
+}
+/**
+ * nop-does not do anything on the stack
+ * @stack: pointer to a pointer to the stack
+ * @line_number: line number
+ * Return: void
+ */
+void nop(stack_t **stack, unsigned int line_number)
+{
+	return;
 }
