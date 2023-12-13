@@ -1,7 +1,7 @@
 #include "monty.h"
 
 /* monty list command context */
-list_t monty_list = {NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, _free};
+list_t monty_list = {NULL, NULL, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, _free};
 
 /**
  * is_integer - returns 1 if the string is an integer else 0
@@ -133,15 +133,17 @@ void execute_command(char *command)
 	/* handle comments and nop opcode */
 	if (*command == '#')
 		return;
-
 	while (instructs[i].opcode != NULL)
 	{
 		monty_list.opcode = strtok(command, " ");
-
+		if (stack(monty_list.opcode) || queue(monty_list.opcode))
+		{
+			monty_list.ds = set_ds(monty_list.opcode);
+			return;
+		}
 		/* handle the nop opcode and failed missing opcodes */
 		if (monty_list.opcode == NULL || strcmp(monty_list.opcode, "nop") == 0)
 			return;
-
 		if (strcmp(instructs[i].opcode, monty_list.opcode) == 0)
 		{
 			if (strcmp(monty_list.opcode, "push") == 0)
@@ -151,7 +153,6 @@ void execute_command(char *command)
 		}
 		i++; /* keep searching for the right function to handle this */
 	}
-
 	if (instructs[i].opcode == NULL)
 	{
 		/* if we made it this far, the opcode does not exit */
