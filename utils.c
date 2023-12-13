@@ -66,7 +66,7 @@ void handle_push(stack_t **stack, unsigned int line_number)
 void parse(void)
 {
 	FILE *file;
-	size_t i, n_read;
+	size_t i;
 
 	file = fopen(monty_list.filename, "r");
 	if (file == NULL)
