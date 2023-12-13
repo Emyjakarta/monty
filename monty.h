@@ -74,6 +74,7 @@ extern list_t monty_list;
 #define size(list) ((list).size)
 #define is_empty(list) ((list).size == 0)
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
+#define is_in_ascii_range(c) ((c) >= 0 && (c) <= 127)
 
 /* stack operations */
 
@@ -102,5 +103,10 @@ void handle_push(stack_t **stack, unsigned int line_number);
 /* monty math operations */
 
 void swap(stack_t **stack, unsigned int line_number);
+
+/* monty string operations */
+
+void pchar(__attribute__((unused)) stack_t **stack, unsigned int line_number);
+void pstr(stack_t **stack, __attribute__((unused)) unsigned int line_number);
 
 #endif /* MONTY_H */

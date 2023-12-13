@@ -115,24 +115,22 @@ void execute_command(char *command)
 	size_t i = 0;
 
 	instruction_t instructs[] = {
-		{"push", handle_push},
-		{"pop", pop},
-		{"pint", pint},
-		{"pall", pall},
-		{"add", add},
-		{"swap", swap},
-		{"sub", sub},
-		{"div", division},
-		{"mul", mul},
-		{"mod", mod},
-		{NULL, NULL}
-	};
+		{"push", handle_push}, {"pop", pop},	  {"pint", pint},
+		{"pall", pall},		   {"add", add},	  {"swap", swap},
+		{"sub", sub},		   {"div", division}, {"mul", mul},
+		{"mod", mod},		   {"pchar", pchar},  {"pstr", pstr},
+		{NULL, NULL}};
+
+	/* handle comments and nop opcode */
+	if (*command == '#')
+		return;
 
 	while (instructs[i].opcode != NULL)
 	{
 		monty_list.opcode = strtok(command, " ");
 
-		if (monty_list.opcode == NULL)
+		/* handle the nop opcode and failed missing opcodes */
+		if (monty_list.opcode == NULL || strcmp(monty_list.opcode, "nop") == 0)
 			return;
 
 		if (strcmp(instructs[i].opcode, monty_list.opcode) == 0)
