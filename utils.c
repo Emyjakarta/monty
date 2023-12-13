@@ -4,19 +4,6 @@
 list_t monty_list = {NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, _free};
 
 /**
- * _free - handles the deallocation of memory
- * @ptr: a pointer to the memory address to free
- */
-void _free(void **ptr)
-{
-	if (ptr != NULL || *ptr != NULL)
-	{
-		free(*ptr);
-		*ptr = NULL;
-	}
-}
-
-/**
  * is_integer - returns 1 if the string is an integer else 0
  * @str: the string containing the value to check
  *
@@ -48,10 +35,6 @@ void handle_push(stack_t **stack, unsigned int line_number)
 	/* handle non-integer values */
 	if (monty_list.value == NULL || is_integer(monty_list.value) == 0)
 	{
-		/* clean memory for the failed push command */
-		if (monty_list.commands[line_number] == NULL)
-			monty_list.cleanup((void **)&monty_list.commands[line_number - 1]);
-
 		fprintf(stderr, "L%u: usage: push integer\n", line_number);
 		handle_exit();
 	}
@@ -66,7 +49,7 @@ void handle_push(stack_t **stack, unsigned int line_number)
 void parse(void)
 {
 	FILE *file;
-	size_t i;
+	size_t n_read, total_read = 0;
 
 	file = fopen(monty_list.filename, "r");
 	if (file == NULL)
@@ -75,23 +58,45 @@ void parse(void)
 		handle_exit();
 	}
 
-	monty_list.buffer = malloc(sizeof(char) * BUFF_SIZE);
+	monty_list.buffer = _calloc(BUFF_SIZE, sizeof(char));
 	if (monty_list.buffer == NULL)
 	{
 		fprintf(stderr, "malloc failed\n");
 		handle_exit();
 	}
 
-	memset(monty_list.buffer, 0, sizeof(char) * BUFF_SIZE);
-	while (fread(monty_list.buffer, BUFF_SIZE, 1, file) != 0)
-		;
+	while ((n_read = (fread(monty_list.buffer, BUFF_SIZE, 1, file)) != 0))
+	{
+		if (n_read >= total_read)
+		{
+			monty_list.buffer =
+				_realloc(monty_list.buffer, total_read, total_read * 2);
+			if (monty_list.buffer == NULL)
+			{
+				fprintf(stderr, "malloc failed\n");
+				handle_exit();
+			}
+		}
+		total_read += n_read;
+	}
 	fclose(file);
 
-	if (monty_list.buffer == NULL || *monty_list.buffer == '\0')
+	if (*monty_list.buffer == '\0')
 		return;
+
+	parse_helper();
+}
+
+/**
+ * parse_helper - a helper function to complete the parsing before execution
+ */
+void parse_helper(void)
+{
+	size_t i;
 
 	monty_list.commands = tokenize(monty_list.buffer, "\n");
 	monty_list.cleanup((void **)&monty_list.buffer);
+
 	if (monty_list.commands == NULL)
 		return; /* probably we received a bunch of whitespaces or nothing */
 
@@ -99,11 +104,14 @@ void parse(void)
 	while (monty_list.commands[i] != NULL)
 	{
 		++monty_list.line_number;
-		/* handle the command execution */
+
+		/* handle the command execution and clean up */
 		execute_command(monty_list.commands[i]);
 		monty_list.cleanup((void **)&monty_list.commands[i]);
-		i++;
+
+		i++; /* get the next command */
 	}
+	/* clean up and leave here */
 	monty_list.cleanup((void **)&monty_list.commands);
 }
 

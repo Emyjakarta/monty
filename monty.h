@@ -80,33 +80,41 @@ extern list_t monty_list;
 
 void push(stack_t **stack, int data);
 void pop(stack_t **stack, unsigned int line_number);
+void swap(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
 void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number);
-void add(stack_t **stack, unsigned int line_number);
-void sub(stack_t **stack, unsigned int line_number);
-void division(stack_t **stack, unsigned int line_number);
-void mul(stack_t **stack, unsigned int line_number);
-void mod(stack_t **stack, unsigned int line_number);
 
 /* utility functions */
 
 void parse(void);
-void free_cmds(void);
-void _free(void **ptr);
+void parse_helper(void);
 void handle_exit(void);
 int is_integer(const char *str);
 void execute_command(char *command);
-void safe_free_stack(stack_t **stack);
 char **tokenize(char *str, const char *delim);
 void handle_push(stack_t **stack, unsigned int line_number);
 
 /* monty math operations */
 
-void swap(stack_t **stack, unsigned int line_number);
+void sub(stack_t **stack, unsigned int line_number);
+void mul(stack_t **stack, unsigned int line_number);
+void mod(stack_t **stack, unsigned int line_number);
+void add(stack_t **stack, unsigned int line_number);
+void division(stack_t **stack, unsigned int line_number);
 
 /* monty string operations */
 
-void pchar(__attribute__((unused)) stack_t **stack, unsigned int line_number);
 void pstr(stack_t **stack, __attribute__((unused)) unsigned int line_number);
+void pchar(__attribute__((unused)) stack_t **stack, unsigned int line_number);
+
+/* custom memory functions */
+
+void free_cmds(void);
+void _free(void **ptr);
+void safe_free_stack(stack_t **stack);
+void *_calloc(unsigned int nmemb, unsigned int size);
+void *_memcpy(void *dest, const void *src, size_t n);
+void *_memset(void *mem_area, int c, unsigned int size);
+void *_realloc(void *old_mem_blk, size_t old_size, size_t new_size);
 
 #endif /* MONTY_H */
