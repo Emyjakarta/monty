@@ -22,12 +22,12 @@ void rotl(stack_t **stack, unsigned int line_number)
 		fprintf(stderr, "L%u: can't rotl, stack too short\n", line_number);
 		return;
 	}
-	/*top_element = *stack;*/
-	/*second = (*stack)->next;*/
-	while (top_element->next != NULL)
+	/*top_element = *stack;
+	second = (*stack)->next;*/
+	/*while (top_element->next != NULL)
 	{
 		top_element = top_element->next;
-	}
+	}*/
 	/*top_element->next = *stack;
 	(*stack)->prev = top_element;
 	*stack = second;
