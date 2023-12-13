@@ -118,6 +118,7 @@ void execute_command(char *command)
 								 {"pop", pop},
 								 {"pint", pint},
 								 {"pall", pall},
+								 {"swap", swap},
 								 {NULL, NULL}};
 
 	while (instructs[i].opcode != NULL)

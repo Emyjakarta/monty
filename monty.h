@@ -94,4 +94,8 @@ void safe_free_stack(stack_t **stack);
 char **tokenize(char *str, const char *delim);
 void handle_push(stack_t **stack, unsigned int line_number);
 
+/* monty math operations */
+
+void swap(stack_t **stack, unsigned int line_number);
+
 #endif /* MONTY_H */
