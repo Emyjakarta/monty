@@ -7,11 +7,11 @@
  */
 void push(stack_t **stack, int data)
 {
-	stack_t *new_frame = _calloc(monty_list.size, sizeof(stack_t));
+	stack_t *new_frame = _calloc(1, sizeof(stack_t));
 
 	if (new_frame == NULL)
 	{
-		fprintf(stderr, "Error: _calloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
 		handle_exit();
 	}
 
