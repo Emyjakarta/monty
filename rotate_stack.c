@@ -14,51 +14,70 @@ void rotl(stack_t **stack, unsigned int line_number)
 	stack_t *top_element = *stack;
 	(void) line_number;
 
-	/*stack_t *second = NULL;*/
+	stack_t *second = NULL;
+	stack_t *second_to_last = monty_list.tail->prev;
 
 	if (size(monty_list) < 2 || top_element == NULL || top_element->next == NULL)
-	/*if (*stack == NULL || (*stack)->next == NULL)*/
+		/*if (*stack == NULL || (*stack)->next == NULL)*/
 	{
 		fprintf(stderr, "L%u: can't rotl, stack too short\n", line_number);
 		return;
 	}
-	/*top_element = *stack;
-	second = (*stack)->next;*/
-	/*while (top_element->next != NULL)
-	{
-		top_element = top_element->next;
-	}*/
-	/*top_element->next = *stack;
-	(*stack)->prev = top_element;
-	*stack = second;
+	second = monty_list.head->next;
+	top_element->next = NULL;
+	top_element->prev = second_to_last;
+	second->prev = NULL;
+	if (second->next != NULL)
+	{	second->next = second->next->next;
+		second->next->prev = second;
+	}
+	monty_list.head = second;
+	monty_list.tail->prev = top_element;
+	monty_list.tail = top_element;
+
+	/*monty_list.head->prev = top_element;
+	monty_list.head = monty_list.head->next;
+	top_element->next = NULL;
+	monty_list.head->prev = NULL;
 	(*stack)->prev = NULL;
 	monty_list.tail = top_element;*/
+	/*top_element = *stack;
+	  second = (*stack)->next;*/
+	/*while (top_element->next != NULL)
+	  {
+	  top_element = top_element->next;
+	  }*/
+	/*top_element->next = *stack;
+	  (*stack)->prev = top_element;
+	 *stack = second;
+	 (*stack)->prev = NULL;
+	 monty_list.tail = top_element;*/
 
 	/*monty_list.head = second;
-	if (monty_list.tail->next != NULL)
-	{
-		top_element->next = monty_list.tail->next;
-		monty_list.tail->next->prev = top_element;
-		monty_list.tail->next = NULL;
-	}
-	monty_list.head->prev = NULL;
-	(*stack)->prev = monty_list.tail;
-	monty_list.tail = top_element;*/
+	  if (monty_list.tail->next != NULL)
+	  {
+	  top_element->next = monty_list.tail->next;
+	  monty_list.tail->next->prev = top_element;
+	  monty_list.tail->next = NULL;
+	  }
+	  monty_list.head->prev = NULL;
+	  (*stack)->prev = monty_list.tail;
+	  monty_list.tail = top_element;*/
 
 	/*top_element->next = *stack;*/
 	/*stack = second;
-	second->prev = NULL;
-	top_element->next->prev = top_element;
-	top_element->next = NULL;
-	monty_list.tail = top_element;*/
+	  second->prev = NULL;
+	  top_element->next->prev = top_element;
+	  top_element->next = NULL;
+	  monty_list.tail = top_element;*/
 
-	top_element->next = monty_list.head;
+	/*top_element->next = monty_list.head;
 	monty_list.head->prev = top_element;
 	monty_list.head = monty_list.head->next;
 	top_element->next = NULL;
 	monty_list.head->prev = NULL;
 	(*stack)->prev = NULL;
-	monty_list.tail = top_element;
+	monty_list.tail = top_element;*/
 }
 /**
  *  * mod-computes the rest of the division of the
