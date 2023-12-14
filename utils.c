@@ -72,8 +72,7 @@ void parse(void)
 		total_read += n_read;
 		if (total_read >= size)
 		{
-			monty_list.buffer =
-				_realloc(monty_list.buffer, size, size * 2);
+			monty_list.buffer = _realloc(monty_list.buffer, size, size * 2);
 			if (monty_list.buffer == NULL)
 			{
 				fprintf(stderr, "Error: malloc failed\n");
@@ -132,9 +131,6 @@ void execute_command(char *command)
 		{"mod", mod},		   {"pchar", pchar},  {"pstr", pstr},
 		{"rotl", rotl},		   {"rotr", rotr},	  {NULL, NULL}};
 
-	/* handle comments and nop opcode */
-	if (*command == '#')
-		return;
 	while (instructs[i].opcode != NULL)
 	{
 		monty_list.opcode = strtok(command, " ");
@@ -144,8 +140,9 @@ void execute_command(char *command)
 			monty_list.ds = set_ds(monty_list.opcode);
 			return;
 		}
-		/* handle the nop opcode and failed missing opcodes */
-		if (monty_list.opcode == NULL || strcmp(monty_list.opcode, "nop") == 0)
+		/* handle comments, the nop opcode and failed missing opcodes */
+		if (monty_list.opcode == NULL ||
+			strcmp(monty_list.opcode, "nop") == 0 || *monty_list.opcode == '#')
 			return;
 		if (strcmp(instructs[i].opcode, monty_list.opcode) == 0)
 		{
