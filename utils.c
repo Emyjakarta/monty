@@ -66,7 +66,7 @@ void parse(void)
 		handle_exit();
 	}
 
-	while ((n_read = fread(monty_list.buffer + total_read, 1,
+	while ((n_read = fread(monty_list.buffer + total_read, sizeof(char),
 						   size - total_read, file)) > 0)
 	{
 		total_read += n_read;
@@ -74,20 +74,20 @@ void parse(void)
 		{
 			monty_list.buffer =
 				_realloc(monty_list.buffer, size, size * 2);
-			size *= 2;
 			if (monty_list.buffer == NULL)
 			{
 				fprintf(stderr, "Error: malloc failed\n");
 				fclose(file);
 				handle_exit();
 			}
+			size *= 2;
 		}
 	}
 	fclose(file);
-
 	if (*monty_list.buffer == '\0')
-		return;
-	parse_helper();
+		monty_list.cleanup((void **)&monty_list.buffer);
+	else
+		parse_helper();
 }
 
 /**
