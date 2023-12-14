@@ -38,6 +38,14 @@ void rotl(stack_t **stack, __attribute__((unused)) unsigned int line_number)
  */
 void rotr(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 {
-	/* TODO: Solution here. All operation must be in constant time O(1) */
-	(void)stack; /* please remove this line when done */
+	if (size(monty_list) < 2 || size(monty_list) == 0)
+		return;
+
+	monty_list.tail->next = monty_list.head;
+	monty_list.head->prev = monty_list.tail;
+	monty_list.head = monty_list.tail;
+	monty_list.tail = monty_list.tail->prev;
+	monty_list.tail->next = NULL;
+	monty_list.head->prev = NULL;
+	*stack = monty_list.head;
 }
