@@ -147,7 +147,7 @@ void execute_command(char *command)
 		if (strcmp(instructs[i].opcode, monty_list.opcode) == 0)
 		{
 			if (strcmp(monty_list.opcode, "push") == 0)
-				monty_list.value = strtok(NULL, " ");
+				monty_list.value = strtok(NULL, " \t");
 			instructs[i].f(&monty_list.head, monty_list.line_number);
 			return; /* we just executed a command, is there more? */
 		}
