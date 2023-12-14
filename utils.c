@@ -49,7 +49,7 @@ void handle_push(stack_t **stack, unsigned int line_number)
 void parse(void)
 {
 	FILE *file;
-	size_t n_read, total_read = 0;
+	size_t n_read, size = BUFF_SIZE, total_read = 0;
 
 	file = fopen(monty_list.filename, "r");
 	if (file == NULL)
@@ -58,32 +58,35 @@ void parse(void)
 		handle_exit();
 	}
 
-	monty_list.buffer = _calloc(BUFF_SIZE, sizeof(char));
+	monty_list.buffer = _calloc(size, sizeof(char));
 	if (monty_list.buffer == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
+		fclose(file);
 		handle_exit();
 	}
 
-	while ((n_read = (fread(monty_list.buffer, BUFF_SIZE, 1, file)) != 0))
+	while ((n_read = fread(monty_list.buffer + total_read, 1,
+						   size - total_read, file)) > 0)
 	{
-		if (n_read >= total_read)
+		total_read += n_read;
+		if (total_read >= size)
 		{
 			monty_list.buffer =
-				_realloc(monty_list.buffer, total_read, total_read * 2);
+				_realloc(monty_list.buffer, size, size * 2);
+			size *= 2;
 			if (monty_list.buffer == NULL)
 			{
 				fprintf(stderr, "Error: malloc failed\n");
+				fclose(file);
 				handle_exit();
 			}
 		}
-		total_read += n_read;
 	}
 	fclose(file);
 
 	if (*monty_list.buffer == '\0')
 		return;
-
 	parse_helper();
 }
 
