@@ -7,11 +7,11 @@
  */
 void push(stack_t **stack, int data)
 {
-	stack_t *new_frame = malloc(sizeof(stack_t));
+	stack_t *new_frame = _calloc(monty_list.size, sizeof(stack_t));
 
 	if (new_frame == NULL)
 	{
-		fprintf(stderr, "Error: malloc failed\n");
+		fprintf(stderr, "Error: _calloc failed\n");
 		handle_exit();
 	}
 
@@ -99,7 +99,7 @@ void pint(__attribute__((unused)) stack_t **stack, unsigned int line_number)
  */
 void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 {
-	stack_t *tmp;
+	stack_t *tmp = NULL;
 
 	/* handle cases when the stack is empty */
 	if (is_empty(monty_list))
