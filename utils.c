@@ -1,20 +1,7 @@
 #include "monty.h"
 
 /* monty list command context */
-list_t monty_list = {NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, _free};
-
-/**
- * _free - handles the deallocation of memory
- * @ptr: a pointer to the memory address to free
- */
-void _free(void **ptr)
-{
-	if (ptr != NULL || *ptr != NULL)
-	{
-		free(*ptr);
-		*ptr = NULL;
-	}
-}
+list_t monty_list = {NULL, NULL, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, _free};
 
 /**
  * is_integer - returns 1 if the string is an integer else 0
@@ -48,10 +35,6 @@ void handle_push(stack_t **stack, unsigned int line_number)
 	/* handle non-integer values */
 	if (monty_list.value == NULL || is_integer(monty_list.value) == 0)
 	{
-		/* clean memory for the failed push command */
-		if (monty_list.commands[line_number] == NULL)
-			monty_list.cleanup((void **)&monty_list.commands[line_number - 1]);
-
 		fprintf(stderr, "L%u: usage: push integer\n", line_number);
 		handle_exit();
 	}
@@ -66,7 +49,7 @@ void handle_push(stack_t **stack, unsigned int line_number)
 void parse(void)
 {
 	FILE *file;
-	size_t i;
+	size_t n_read, size = BUFF_SIZE, total_read = 0;
 
 	file = fopen(monty_list.filename, "r");
 	if (file == NULL)
@@ -75,23 +58,48 @@ void parse(void)
 		handle_exit();
 	}
 
-	monty_list.buffer = malloc(sizeof(char) * BUFF_SIZE);
+	monty_list.buffer = _calloc(size, sizeof(char));
 	if (monty_list.buffer == NULL)
 	{
-		fprintf(stderr, "malloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
+		fclose(file);
 		handle_exit();
 	}
 
-	memset(monty_list.buffer, 0, sizeof(char) * BUFF_SIZE);
-	while (fread(monty_list.buffer, BUFF_SIZE, 1, file) != 0)
-		;
+	while ((n_read = fread(monty_list.buffer + total_read, 1,
+						   size - total_read, file)) > 0)
+	{
+		total_read += n_read;
+		if (total_read >= size)
+		{
+			monty_list.buffer =
+				_realloc(monty_list.buffer, size, size * 2);
+			size *= 2;
+			if (monty_list.buffer == NULL)
+			{
+				fprintf(stderr, "Error: malloc failed\n");
+				fclose(file);
+				handle_exit();
+			}
+		}
+	}
 	fclose(file);
 
-	if (monty_list.buffer == NULL || *monty_list.buffer == '\0')
+	if (*monty_list.buffer == '\0')
 		return;
+	parse_helper();
+}
+
+/**
+ * parse_helper - a helper function to complete the parsing before execution
+ */
+void parse_helper(void)
+{
+	size_t i;
 
 	monty_list.commands = tokenize(monty_list.buffer, "\n");
 	monty_list.cleanup((void **)&monty_list.buffer);
+
 	if (monty_list.commands == NULL)
 		return; /* probably we received a bunch of whitespaces or nothing */
 
@@ -99,11 +107,14 @@ void parse(void)
 	while (monty_list.commands[i] != NULL)
 	{
 		++monty_list.line_number;
-		/* handle the command execution */
+
+		/* handle the command execution and clean up */
 		execute_command(monty_list.commands[i]);
 		monty_list.cleanup((void **)&monty_list.commands[i]);
-		i++;
+
+		i++; /* get the next command */
 	}
+	/* clean up and leave here */
 	monty_list.cleanup((void **)&monty_list.commands);
 }
 
@@ -114,27 +125,28 @@ void parse(void)
 void execute_command(char *command)
 {
 	size_t i = 0;
-
 	instruction_t instructs[] = {
 		{"push", handle_push}, {"pop", pop},	  {"pint", pint},
 		{"pall", pall},		   {"add", add},	  {"swap", swap},
 		{"sub", sub},		   {"div", division}, {"mul", mul},
 		{"mod", mod},		   {"pchar", pchar},  {"pstr", pstr},
-		{"rotl", rotl}, {"rotr", rotr},
-		{NULL, NULL}};
+		{"rotl", rotl},		   {"rotr", rotr},	  {NULL, NULL}};
 
 	/* handle comments and nop opcode */
 	if (*command == '#')
 		return;
-
 	while (instructs[i].opcode != NULL)
 	{
 		monty_list.opcode = strtok(command, " ");
-
+		if (monty_list.opcode != NULL &&
+			(stack(monty_list.opcode) || queue(monty_list.opcode)))
+		{
+			monty_list.ds = set_ds(monty_list.opcode);
+			return;
+		}
 		/* handle the nop opcode and failed missing opcodes */
 		if (monty_list.opcode == NULL || strcmp(monty_list.opcode, "nop") == 0)
 			return;
-
 		if (strcmp(instructs[i].opcode, monty_list.opcode) == 0)
 		{
 			if (strcmp(monty_list.opcode, "push") == 0)
@@ -144,7 +156,6 @@ void execute_command(char *command)
 		}
 		i++; /* keep searching for the right function to handle this */
 	}
-
 	if (instructs[i].opcode == NULL)
 	{
 		/* if we made it this far, the opcode does not exit */

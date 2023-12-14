@@ -42,6 +42,8 @@ typedef struct instruction_s
  * @head: keeps the address of the head node
  * @tail: keeps the address of the tail node (helps to achieve O(1) when
  * inserting at the end)
+ * @ds: keeps track of the specific data structure to use with the linked lists
+ * (either stacks or queues)
  * @size: keeps track of the number of nodes int the queue or stack
  * @line_number: the line number where the instruction appears
  * @filename: the name of the file received on the command line (argv[1])
@@ -56,6 +58,7 @@ typedef struct list_s
 	stack_t *head;
 	stack_t *tail;
 	size_t size;
+	int ds;
 	unsigned int line_number;
 	char *filename;
 	char *buffer;
@@ -68,6 +71,12 @@ typedef struct list_s
 /* monty command context */
 extern list_t monty_list;
 
+/* flags to choose which data structure to use */
+
+#define USE_QUEUE 1
+#define USE_STACK 2
+#define USE_DEFAULT 0 /* default is stack */
+
 /* useful simple macro functions for quick info */
 
 #define top(list) ((list).head->n)
@@ -75,40 +84,55 @@ extern list_t monty_list;
 #define is_empty(list) ((list).size == 0)
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 #define is_in_ascii_range(c) ((c) >= 0 && (c) <= 127)
+#define queue(opcode) (strcmp((opcode), "queue") == 0)
+#define stack(opcode) (strcmp((opcode), "stack") == 0)
+#define set_ds(opcode)                                                        \
+	((queue(opcode)) ? USE_QUEUE : ((stack(opcode)) ? USE_STACK : USE_DEFAULT))
 
 /* stack operations */
 
 void push(stack_t **stack, int data);
 void pop(stack_t **stack, unsigned int line_number);
+void swap(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
 void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number);
-void add(stack_t **stack, unsigned int line_number);
-void sub(stack_t **stack, unsigned int line_number);
-void division(stack_t **stack, unsigned int line_number);
-void mul(stack_t **stack, unsigned int line_number);
-void mod(stack_t **stack, unsigned int line_number);
-void rotl(stack_t **stack, unsigned int line_number);
-void rotr(stack_t **stack, unsigned int line_number);
 
 /* utility functions */
 
 void parse(void);
-void free_cmds(void);
-void _free(void **ptr);
+void parse_helper(void);
 void handle_exit(void);
 int is_integer(const char *str);
 void execute_command(char *command);
-void safe_free_stack(stack_t **stack);
 char **tokenize(char *str, const char *delim);
 void handle_push(stack_t **stack, unsigned int line_number);
 
 /* monty math operations */
 
-void swap(stack_t **stack, unsigned int line_number);
+void sub(stack_t **stack, unsigned int line_number);
+void mul(stack_t **stack, unsigned int line_number);
+void mod(stack_t **stack, unsigned int line_number);
+void add(stack_t **stack, unsigned int line_number);
+void division(stack_t **stack, unsigned int line_number);
 
 /* monty string operations */
 
-void pchar(__attribute__((unused)) stack_t **stack, unsigned int line_number);
 void pstr(stack_t **stack, __attribute__((unused)) unsigned int line_number);
+void pchar(__attribute__((unused)) stack_t **stack, unsigned int line_number);
+
+/* custom memory functions */
+
+void free_cmds(void);
+void _free(void **ptr);
+void safe_free_stack(stack_t **stack);
+void *_calloc(unsigned int nmemb, unsigned int size);
+void *_memcpy(void *dest, const void *src, size_t n);
+void *_memset(void *mem_area, int c, unsigned int size);
+void *_realloc(void *old_mem_blk, size_t old_size, size_t new_size);
+
+/* rotation operations */
+
+void rotl(stack_t **stack, __attribute__((unused)) unsigned int line_number);
+void rotr(stack_t **stack, __attribute__((unused)) unsigned int line_number);
 
 #endif /* MONTY_H */

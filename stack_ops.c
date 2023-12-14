@@ -2,7 +2,7 @@
 
 /**
  * push - inserts a node at the beginning of the list
- * @stack: a pointer to the stack
+ * @stack: a pointer to the stack or queue
  * @data: the integer value to insert
  */
 void push(stack_t **stack, int data)
@@ -24,14 +24,23 @@ void push(stack_t **stack, int data)
 		(*stack)->next = NULL;
 		monty_list.tail = *stack;
 	}
-	else
+	else /* check whether to push into a stack or a queue */
 	{
-		new_frame->next = *stack;
-		(*stack)->prev = new_frame;
-		if ((*stack)->next == NULL)
+		if (monty_list.ds == USE_QUEUE)
+		{
+			monty_list.tail->next = new_frame;
+			new_frame->prev = monty_list.tail;
+			monty_list.tail = new_frame;
+		}
+		else /* use the default - stack */
+		{
+			new_frame->next = *stack;
 			(*stack)->prev = new_frame;
+			if ((*stack)->next == NULL)
+				(*stack)->prev = new_frame;
 
-		*stack = new_frame;
+			*stack = new_frame;
+		}
 	}
 
 	monty_list.size++;
@@ -39,7 +48,7 @@ void push(stack_t **stack, int data)
 
 /**
  * pop - removes a node at the beginning of the linked list
- * @stack: a pointer to the stack
+ * @stack: a pointer to the stack or queue
  * @line_number: the index of the current command
  */
 void pop(stack_t **stack, unsigned int line_number)

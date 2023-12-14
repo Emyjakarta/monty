@@ -36,14 +36,12 @@ void handle_exit(void)
 */
 void free_cmds(void)
 {
-	int i;
+	size_t i;
 
 	if (monty_list.commands == NULL)
-	{
 		return;
-	}
 
-	for (i = 0; monty_list.commands[i] != NULL; i++)
+	for (i = monty_list.line_number - 1; monty_list.commands[i] != NULL; i++)
 	{
 		monty_list.cleanup((void **)&monty_list.commands[i]);
 	}
@@ -59,7 +57,7 @@ void free_cmds(void)
  */
 char **tokenize(char *str, const char *delim)
 {
-	char **commands = NULL, *token = NULL, *dup_str = NULL;
+	char *token = NULL, *dup_str = NULL;
 	size_t num_of_tokens, i;
 
 	if (str == NULL || *str == '\0' || delim == NULL)
@@ -69,7 +67,7 @@ char **tokenize(char *str, const char *delim)
 	dup_str = strdup(str);
 	if (dup_str == NULL)
 	{
-		fprintf(stderr, "malloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
 		handle_exit();
 	}
 	token = strtok(dup_str, delim);
@@ -83,20 +81,20 @@ char **tokenize(char *str, const char *delim)
 
 	if (num_of_tokens > 0)
 	{
-		commands = malloc(sizeof(char *) * (num_of_tokens + 1));
-		if (commands == NULL)
+		monty_list.commands = _calloc(num_of_tokens + 1, sizeof(char *));
+		if (monty_list.commands == NULL)
 		{
-			fprintf(stderr, "malloc failed");
+			fprintf(stderr, "Error: malloc failed\n");
 			handle_exit();
 		}
 		token = strtok(str, delim);
 		i = 0;
 		while (token != NULL)
 		{
-			commands[i++] = strdup(token);
+			monty_list.commands[i++] = strdup(token);
 			token = strtok(NULL, delim);
 		}
-		commands[i] = NULL;
+		monty_list.commands[i] = NULL;
 	}
-	return (commands);
+	return (monty_list.commands);
 }
