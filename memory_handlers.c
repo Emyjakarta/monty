@@ -34,7 +34,7 @@ void *_realloc(void *old_mem_blk, size_t old_size, size_t new_size)
 		return (NULL);
 	}
 
-	new_mem_blk = malloc(new_size);
+	new_mem_blk = _calloc(new_size, sizeof(char));
 	if (new_mem_blk == NULL)
 		return (NULL); /* memory allocation failed */
 
