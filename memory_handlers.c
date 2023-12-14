@@ -139,7 +139,7 @@ void *_memset(void *mem_area, int c, unsigned int n)
  */
 void _free(void **ptr)
 {
-	if (ptr != NULL || *ptr != NULL)
+	if (ptr != NULL && *ptr != NULL)
 	{
 		free(*ptr);
 		*ptr = NULL;
