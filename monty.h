@@ -130,4 +130,9 @@ void *_memcpy(void *dest, const void *src, size_t n);
 void *_memset(void *mem_area, int c, unsigned int size);
 void *_realloc(void *old_mem_blk, size_t old_size, size_t new_size);
 
+/* rotation operations */
+
+void rotl(stack_t **stack, __attribute__((unused)) unsigned int line_number);
+void rotr(stack_t **stack, __attribute__((unused)) unsigned int line_number);
+
 #endif /* MONTY_H */

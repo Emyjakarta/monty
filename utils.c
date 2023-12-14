@@ -122,17 +122,17 @@ void parse_helper(void)
 void execute_command(char *command)
 {
 	size_t i = 0;
-
 	instruction_t instructs[] = {
 		{"push", handle_push}, {"pop", pop},	  {"pint", pint},
 		{"pall", pall},		   {"add", add},	  {"swap", swap},
 		{"sub", sub},		   {"div", division}, {"mul", mul},
 		{"mod", mod},		   {"pchar", pchar},  {"pstr", pstr},
-		{NULL, NULL}};
+		{"rotl", rotl},		   {"rotr", rotr},	  {NULL, NULL}};
 
 	/* handle comments and nop opcode */
 	if (*command == '#')
 		return;
+
 	while (instructs[i].opcode != NULL)
 	{
 		monty_list.opcode = strtok(command, " ");
