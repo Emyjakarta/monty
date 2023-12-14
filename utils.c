@@ -133,7 +133,7 @@ void execute_command(char *command)
 
 	while (instructs[i].opcode != NULL)
 	{
-		monty_list.opcode = strtok(command, " ");
+		monty_list.opcode = strtok(command, " \t");
 		if (monty_list.opcode != NULL &&
 			(stack(monty_list.opcode) || queue(monty_list.opcode)))
 		{
