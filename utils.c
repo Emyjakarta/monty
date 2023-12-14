@@ -132,11 +132,11 @@ void execute_command(char *command)
 	/* handle comments and nop opcode */
 	if (*command == '#')
 		return;
-
 	while (instructs[i].opcode != NULL)
 	{
 		monty_list.opcode = strtok(command, " ");
-		if (stack(monty_list.opcode) || queue(monty_list.opcode))
+		if (monty_list.opcode != NULL &&
+			(stack(monty_list.opcode) || queue(monty_list.opcode)))
 		{
 			monty_list.ds = set_ds(monty_list.opcode);
 			return;
