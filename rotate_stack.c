@@ -15,7 +15,7 @@ void rotl(stack_t **stack, unsigned int line_number)
 	(void) line_number;
 
 	stack_t *second = NULL;
-	stack_t *second_to_last = monty_list.tail->prev;
+	stack_t *second_to_last = NULL;
 
 	if (size(monty_list) < 2 || top_element == NULL || top_element->next == NULL)
 		/*if (*stack == NULL || (*stack)->next == NULL)*/
@@ -24,16 +24,25 @@ void rotl(stack_t **stack, unsigned int line_number)
 		return;
 	}
 	second = monty_list.head->next;
+	second_to_last = monty_list.tail->prev;
+
+	monty_list.head = second;
 	top_element->next = NULL;
-	top_element->prev = second_to_last;
+	second_to_last->next = top_element;
 	second->prev = NULL;
+	second_to_last->next = top_element;
+	/*top_element->next = NULL;*/
+	top_element->prev = second_to_last;
+	/*second->prev = NULL;
 	if (second->next != NULL)
 	{	second->next = second->next->next;
 		second->next->prev = second;
-	}
-	monty_list.head = second;
+	}*/
+	/*monty_list.head = second;*/
 	monty_list.tail->prev = top_element;
-	monty_list.tail = top_element;
+	top_element->next = NULL;
+	monty_list.tail = second_to_last;
+	/*monty_list.tail = top_element;*/
 
 	/*monty_list.head->prev = top_element;
 	monty_list.head = monty_list.head->next;
