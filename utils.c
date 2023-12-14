@@ -134,8 +134,8 @@ void execute_command(char *command)
 	while (instructs[i].opcode != NULL)
 	{
 		monty_list.opcode = strtok(command, " \t");
-		if (monty_list.opcode != NULL &&
-			(stack(monty_list.opcode) || queue(monty_list.opcode)))
+		if ((monty_list.opcode != NULL || *monty_list.opcode) &&
+			(is_stack(monty_list.opcode) || is_queue(monty_list.opcode)))
 		{
 			monty_list.ds = set_ds(monty_list.opcode);
 			return;

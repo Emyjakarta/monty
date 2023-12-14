@@ -84,10 +84,11 @@ extern list_t monty_list;
 #define is_empty(list) ((list).size == 0)
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 #define is_in_ascii_range(c) ((c) >= 0 && (c) <= 127)
-#define queue(opcode) (strcmp((opcode), "queue") == 0)
-#define stack(opcode) (strcmp((opcode), "stack") == 0)
+#define is_queue(opcode) (strcmp((opcode), "queue") == 0)
+#define is_stack(opcode) (strcmp((opcode), "stack") == 0)
 #define set_ds(opcode)                                                        \
-	((queue(opcode)) ? USE_QUEUE : ((stack(opcode)) ? USE_STACK : USE_DEFAULT))
+	((is_queue(opcode)) ? USE_QUEUE                                           \
+						: ((is_stack(opcode)) ? USE_STACK : USE_DEFAULT))
 
 /* stack operations */
 
