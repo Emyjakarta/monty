@@ -50,7 +50,7 @@ typedef struct instruction_s
  * @buffer: the buffer to store the data from the file
  * @opcode: the opcode to work with
  * @value: used when the @opcode is "push"
- * @commands: an array of commands containing each instruction from the file
+ * @fileptr: used to handle file pointers (buffered I/O)
  * @cleanup: a cleanup function for each element in the list
  */
 typedef struct list_s
@@ -64,7 +64,7 @@ typedef struct list_s
 	char *buffer;
 	char *opcode;
 	char *value;
-	char **commands;
+	FILE *fileptr;
 	void (*cleanup)(void **);
 } list_t;
 
@@ -101,11 +101,9 @@ void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number);
 /* utility functions */
 
 void parse(void);
-void parse_helper(void);
 void handle_exit(void);
 int is_integer(const char *str);
 void execute_command(char *command);
-char **tokenize(char *str, const char *delim);
 void handle_push(stack_t **stack, unsigned int line_number);
 
 /* monty math operations */
@@ -123,7 +121,6 @@ void pchar(__attribute__((unused)) stack_t **stack, unsigned int line_number);
 
 /* custom memory functions */
 
-void free_cmds(void);
 void _free(void **ptr);
 void safe_free_stack(stack_t **stack);
 void *_calloc(unsigned int nmemb, unsigned int size);
