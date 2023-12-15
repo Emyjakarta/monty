@@ -20,7 +20,7 @@ if [ $? -eq 0 ]; then
 	# Remove all .c files
 	make clean
 
-	echo "Monty 0.99 installed successfully to /usr/bin"
+	echo "Monty 0.99 installed successfully to /usr/bin/monty"
 	echo "Man page installed successfully"
 else
 	echo "Failed to compile. Please check the source code and try again."
