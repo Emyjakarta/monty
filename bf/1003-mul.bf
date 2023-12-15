@@ -38,3 +38,6 @@ Get the ASCII representations one more time
 
 Print the product
 >>[.<<]<[<<]>>.
+
+<<
++++++ +++++ .  Add the newline
