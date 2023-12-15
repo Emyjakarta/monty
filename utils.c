@@ -11,16 +11,27 @@ list_t monty_list = {NULL, NULL, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, _free};
  */
 int is_integer(const char *str)
 {
+	int numbers = 0;
+
 	if (str == NULL || *str == '\0')
 		return (0);
 
+	if (*str == '-' || *str == '+')
+		str++; /* moved past the sign */
+
 	while (*str != '\0')
 	{
-		if (is_digit(*str) || str[0] == '-')
+		if (is_digit(*str))
+		{
 			str++; /* we found a number, keep searching */
+			numbers++;
+		}
 		else
 			return (0); /* non-integer found */
 	}
+
+	if (numbers == 0)
+		return (0);
 
 	return (1); /* if we got this far, it's definitely an integer */
 }
@@ -48,11 +59,11 @@ void handle_push(stack_t **stack, unsigned int line_number)
  */
 void parse(void)
 {
-	FILE *file;
-	size_t n_read, size = BUFF_SIZE, total_read = 0;
+	size_t size = BUFF_SIZE;
+	ssize_t n_read;
 
-	file = fopen(monty_list.filename, "r");
-	if (file == NULL)
+	monty_list.fileptr = fopen(monty_list.filename, "r");
+	if (monty_list.fileptr == NULL)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", monty_list.filename);
 		handle_exit();
@@ -62,59 +73,20 @@ void parse(void)
 	if (monty_list.buffer == NULL)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
-		fclose(file);
+		fclose(monty_list.fileptr);
 		handle_exit();
 	}
 
-	while ((n_read = fread(monty_list.buffer + total_read, sizeof(char),
-						   size - total_read, file)) > 0)
-	{
-		total_read += n_read;
-		if (total_read >= size)
-		{
-			monty_list.buffer = _realloc(monty_list.buffer, size, size * 2);
-			if (monty_list.buffer == NULL)
-			{
-				fprintf(stderr, "Error: malloc failed\n");
-				fclose(file);
-				handle_exit();
-			}
-			size *= 2;
-		}
-	}
-	fclose(file);
-	if (*monty_list.buffer == '\0')
-		monty_list.cleanup((void **)&monty_list.buffer);
-	else
-		parse_helper();
-}
-
-/**
- * parse_helper - a helper function to complete the parsing before execution
- */
-void parse_helper(void)
-{
-	size_t i;
-
-	monty_list.commands = tokenize(monty_list.buffer, "\n");
-	monty_list.cleanup((void **)&monty_list.buffer);
-
-	if (monty_list.commands == NULL)
-		return; /* probably we received a bunch of whitespaces or nothing */
-
-	i = 0;
-	while (monty_list.commands[i] != NULL)
+	while ((n_read = getline(&monty_list.buffer, &size, monty_list.fileptr)) !=
+		   -1)
 	{
 		++monty_list.line_number;
-
-		/* handle the command execution and clean up */
-		execute_command(monty_list.commands[i]);
-		monty_list.cleanup((void **)&monty_list.commands[i]);
-
-		i++; /* get the next command */
+		execute_command(monty_list.buffer);
 	}
-	/* clean up and leave here */
-	monty_list.cleanup((void **)&monty_list.commands);
+
+	/* close the file pointer and cleanup memory for the buffer */
+	fclose(monty_list.fileptr);
+	monty_list.cleanup((void **)&monty_list.buffer);
 }
 
 /**
@@ -133,7 +105,7 @@ void execute_command(char *command)
 
 	while (instructs[i].opcode != NULL)
 	{
-		monty_list.opcode = strtok(command, " \t");
+		monty_list.opcode = strtok(command, " \t\n");
 		if ((monty_list.opcode != NULL) &&
 			(is_stack(monty_list.opcode) || is_queue(monty_list.opcode)))
 		{
@@ -147,7 +119,7 @@ void execute_command(char *command)
 		if (strcmp(instructs[i].opcode, monty_list.opcode) == 0)
 		{
 			if (strcmp(monty_list.opcode, "push") == 0)
-				monty_list.value = strtok(NULL, " \t");
+				monty_list.value = strtok(NULL, " \t\n");
 			instructs[i].f(&monty_list.head, monty_list.line_number);
 			return; /* we just executed a command, is there more? */
 		}
