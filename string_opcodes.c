@@ -9,7 +9,7 @@ void pchar(__attribute__((unused)) stack_t **stack, unsigned int line_number)
 {
 	if (is_empty(monty_list))
 	{
-		fprintf(stderr, "L%u: can't pchar, stack empty", line_number);
+		fprintf(stderr, "L%u: can't pchar, stack empty\n", line_number);
 		handle_exit();
 	}
 
