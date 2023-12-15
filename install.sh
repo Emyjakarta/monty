@@ -17,8 +17,10 @@ if [ $? -eq 0 ]; then
 	cp monty.1 /usr/share/man/man1/monty.1
 	# Update the man page database
 	mandb
+	# Remove all .c files
+	make clean
 
-	echo "Monty 0.99 installed successfully to /usr/bin"
+	echo "Monty 0.99 installed successfully to /usr/bin/monty"
 	echo "Man page installed successfully"
 else
 	echo "Failed to compile. Please check the source code and try again."
