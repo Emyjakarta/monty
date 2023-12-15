@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=c89
 
 SRCS = $(wildcard *.c)
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:*.c=*.o)
 EXEC = monty
 
 .PHONY: all clean
