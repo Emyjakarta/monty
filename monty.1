@@ -1,0 +1,101 @@
+.TH MONTY 1 "December 2023" Manual for Monty Bytecodes Interpreter
+
+.SH NAME
+monty \- Monty Bytecode Interpreter
+Monty 0.98 is a scripting language that is first compiled into Monty byte codes (Just like Python). It relies on a unique stack and queue, with specific instructions to manipulate it.
+
+.SH SYNOPSIS
+.B monty
+.I file
+
+.SH DESCRIPTION
+The Monty Bytecode Interpreter reads and executes Monty bytecode files. It relies on unique stack and queue with specific instructions to manipulate it.
+
+.SS Monty Bytecode Files
+Files containing Monty bytecodes usually have the .m extension. Most of the industry uses this standard but it is not required by the specification of the language. There is not more than one instruction per line. There can be any number of spaces before or after the opcode and its argument.
+
+.SH USAGE
+.B monty
+.I file
+
+.SH OPTIONS
+.IP "file"
+The bytecode file to be parsed and executed by the Monty Bytecode Interpreter.
+
+.SH OPCODES
+The following opcodes (commands) are supported by the Monty Bytecode Interpreter either for the stack or the queue:
+
+.IP "\fBpush\fR"
+Pushes (adds) an element onto the stack.
+
+.IP "\fBpop\fR"
+Removes the top element from the stack.
+
+.IP "\fBpint\fR"
+Prints the value at the top of the stack.
+
+.IP "\fBpall\fR"
+Prints all the elements in the stack.
+
+.IP "\fBadd\fR"
+Adds the top two elements of the stack.
+
+.IP "\fBsub\fR"
+Subtracts the top element from the second top element of the stack.
+
+.IP "\fBmul\fR"
+Multiplies the second top element with the top element of the stack.
+
+.IP "\fBdiv\fR"
+Divides the second top element by the top element of the stack.
+
+.IP "\fBmod\fR"
+Computes the remainder of the division of the second top element by the top element of the stack.
+
+.IP "\fBswap\fR"
+Swaps the top two elements of the stack.
+
+.IP "\fBpchar\fR"
+Prints the character at the top of the stack.
+
+.IP "\fBpstr\fR"
+Prints the string starting at the top of the stack.
+
+.IP "\fBrotl\fR"
+Rotates the stack to the top. The top element of the stack becomes the last one, and the second top element of the stack becomes the first one.
+
+.IP "\fBrotr\fR"
+Rotates the stack to the bottom. The last element of the stack becomes the top element of the stack, and the second last element becomes the last one.
+
+.SH EXAMPLES
+Execute a Monty bytecode file:
+.B monty bytecodes/XYZ.m
+
+.SH EXIT STATUS
+The monty opcode exits with the following status codes:
+.IP "0"
+Successful execution.
+.IP "1"
+Failure or error during execution
+
+.SH SEE ALSO
+The Monty Project repository: <https://github.com/Emyjakarta/monty>
+
+.SH AUTHORS
+.IP
+Maxwell Nana Forson <nanaforsonjnr@gmail.com>
+.IP
+Decency Chukwuemeka Ukonu <ukonud4@gmail.com>
+
+.SH BUGS
+Report bugs to: <https://github.com/Emyjakarta/monty/issues>
+
+.SH COPYRIGHT
+This is a free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+.SH DISCLAIMER
+This man page is provided "as is" without any warranty.
+
+.SH NOTES
+This man page is intended to provide a brief overview of the Monty Bytecode Interpreter and its supported opcodes.
