@@ -84,7 +84,7 @@ void parse(void)
 		execute_command(monty_list.buffer);
 	}
 
-	/* let's handle errors that can error on EOF */
+	/* let's handle errors (insufficient memory) or EOF */
 	if (n_read == -1)
 	{
 		/* let's check for memory allocation or reallocation failures */
@@ -138,7 +138,7 @@ void execute_command(char *command)
 	}
 	if (instructs[i].opcode == NULL)
 	{
-		/* if we made it this far, the opcode does not exit */
+		/* if we made it this far, the opcode does not exist */
 		fprintf(stderr, "L%u: unknown instruction %s\n",
 				monty_list.line_number, monty_list.opcode);
 		handle_exit();
